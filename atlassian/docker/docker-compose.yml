@@ -1,0 +1,56 @@
+version: '3.5'
+
+services:
+  jira:
+    image: atlassian/jira-software
+    container_name: jira
+    restart: unless-stopped
+
+    # environment:
+    #   ATL_PROXY_NAME: jira.rock-test
+    #   ATL_PROXY_PORT: 80
+    #   ATL_TOMCAT_SCHEME: https # 開啟https連線
+    #   ATL_TOMCAT_SECURE: true # 開啟安全模式
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data/jira:/var/atlassian/application-data/jira
+      # - ./jira/server.xml:/opt/atlassian/etc/server.xml.j2
+    networks:
+      - internal
+  bitbucket:
+    image: atlassian/bitbucket
+    container_name: bitbucket
+    restart: unless-stopped
+    environment:
+      # SERVER_PROXY_NAME: bitbucket.cryptobees.info
+      # SERVER_PROXY_PORT: 80
+      SERVER_SCHEM: http
+      # SERVER_SECURE: true
+    networks:
+      - internal
+    ports:
+      - "7990:7990"
+    volumes:
+      - ./data/bitbucket:/var/atlassian/application-data/bitbucket
+
+  # confluence: 
+  #   image: atlassian/confluence
+  #   container_name: confluence
+  #   restart: unless-stopped
+  #   environment:
+  #     ATL_PROXY_NAME: confluence.cryptobees.info
+  #     ATL_PROXY_PORT: 443
+  #     ATL_TOMCAT_SCHEME: https
+  #     ATL_TOMCAT_SECURE: true
+  #   networks:
+  #     - internal
+  #   ports:
+  #     - "8090:8090"
+  #   volumes:
+  #     - ./data/confluence:/var/atlassian/application-data/confluence
+
+networks:
+  internal:
+    name: internal
+    driver: bridge
