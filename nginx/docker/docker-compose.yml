@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  nginx:
+    image: nginx:1.21.0
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - "8081:80"
+      - "443:443"
+    restart: always
+    volumes:
+      - /log:/var/log/nginx/
+      - /conf/nginx.conf:/etc/nginx/nginx.conf
+      - /conf/conf.d:/etc/nginx/conf.d
+    networks:
+      - internal
+networks:
+  internal:
+    name: internal
+    driver: bridge
